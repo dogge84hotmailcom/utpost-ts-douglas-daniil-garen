@@ -1,11 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { get } from '../api'
+import type { TourDetail } from '@utpost/shared'
+import { elevationGain } from '@/lib/tours'
 
 const route = useRoute()
-const tour = ref(null)
-const error = ref(null)
+const tour = ref<TourDetail | null>(null)
+const error = ref<string | null>(null)
 
 onMounted(async () => {
   try {
@@ -16,13 +18,7 @@ onMounted(async () => {
 })
 
 // Porterat rakt av från TourDetail.jsx – samma uträkning, samma resultat.
-const climb = computed(() =>
-  tour.value.logs.reduce((sum, log, i) => {
-    if (i === 0) return 0
-    const diff = log.elevation_m - tour.value.logs[i - 1].elevation_m
-    return diff > 0 ? sum + diff : sum
-  }, 0),
-)
+const climb = elevationGain(tour.value.logs)
 
 const time = (iso) => new Date(iso).toLocaleTimeString('sv-SE')
 </script>
