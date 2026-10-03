@@ -64,7 +64,7 @@ describe('GuidesView', () => {
     renderView()
     await screen.findByText('Kebnekaise')
 
-    await user.type(screen.getByLabelText('Sök'), 'fjfjg')
+    await user.type(screen.getByLabelText('Sök'), 'små')
 
     expect(screen.getByText('Inga guider matchar sökningen.')).toBeInTheDocument()
   })
